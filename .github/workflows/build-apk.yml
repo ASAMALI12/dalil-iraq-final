@@ -7,25 +7,28 @@ jobs:
   build:
     runs-on: ubuntu-latest
 
-    defaults:
-      run:
-        working-directory: dalil-shatra-main
-
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
+
+      - name: Find project
+        run: |
+          echo "Repository contents:"
+          ls -la
+          echo "Searching for package.json:"
+          find . -maxdepth 3 -name package.json -print
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: 20
-          cache: npm
-          cache-dependency-path: dalil-shatra-main/package-lock.json
 
       - name: Install dependencies
+        working-directory: ./dalil-shatra-main
         run: npm install
 
       - name: Build web app
+        working-directory: ./dalil-shatra-main
         run: npm run build
 
       - name: Setup Java
@@ -35,11 +38,12 @@ jobs:
           java-version: 17
 
       - name: Sync Capacitor
+        working-directory: ./dalil-shatra-main
         run: npx cap sync android
 
       - name: Build APK
+        working-directory: ./dalil-shatra-main/android
         run: |
-          cd android
           chmod +x gradlew
           ./gradlew assembleDebug --no-daemon
 
@@ -47,4 +51,4 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: Dalil-Iraq-APK
-          path: dalil-shatra-main/android/app/build/outputs/apk/debug/app-debug.apk
+          path: ./dalil-shatra-main/android/app/build/outputs/apk/debug/app-debug.apk

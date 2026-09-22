@@ -1,0 +1,22 @@
+import type { CapacitorConfig } from '@capacitor/cli';
+
+const config: CapacitorConfig = {
+  appId: 'com.daliliraq.app',
+  appName: 'دليل العراق',
+  webDir: 'dist',
+  server: {
+    androidScheme: 'https',
+    cleartext: false,
+  },
+  android: {
+    allowMixedContent: false,
+    backgroundColor: '#ffffff',
+  },
+  plugins: {
+    CapacitorHttp: {
+      enabled: true,
+    },
+  },
+};
+
+export default config;

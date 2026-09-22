@@ -48,4 +48,3 @@ jobs:
         with:
           name: Dalil-Iraq-APK
           path: dalil-shatra-main/android/app/build/outputs/apk/debug/app-debug.apk
-          path: dalil-shatra-main/android/app/build/outputs/apk/debug/app-debug.apk

@@ -1,0 +1,44 @@
+name: Build iOS IPA
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  ipa:
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - run: npm install --no-audit --no-fund
+      - run: npx cap add ios
+      - name: Icon
+        run: |
+          if [ -f assets/icon.png ]; then npx capacitor-assets generate --ios; fi
+      - name: Plist
+        run: |
+          if [ -f ios-plist.txt ]; then
+            while IFS='=' read -r k v; do
+              [ -z "$k" ] && continue
+              /usr/libexec/PlistBuddy -c "Add :$k string $v" ios/App/App/Info.plist || /usr/libexec/PlistBuddy -c "Set :$k $v" ios/App/App/Info.plist
+            done < ios-plist.txt
+          fi
+      - run: npx cap sync ios
+      - name: Build unsigned
+        run: |
+          cd ios/App
+          xcodebuild -workspace App.xcworkspace -scheme App -configuration Release -sdk iphoneos -derivedDataPath build CODE_SIGNING_ALLOWED=NO CODE_SIGNING_REQUIRED=NO CODE_SIGN_IDENTITY="" clean build
+      - name: Package IPA
+        run: |
+          cd ios/App/build/Build/Products/Release-iphoneos
+          mkdir Payload && cp -R App.app Payload/
+          zip -qry ../../../../../../app-unsigned.ipa Payload
+      - name: Publish IPA
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release delete latest-ios --cleanup-tag -y || true
+          gh release create latest-ios app-unsigned.ipa --title "IPA" --notes "Unsigned build ${{ github.sha }}"

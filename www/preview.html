@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>دليل العراق — المعاينة</title>
+    <style>
+      :root {
+        --phone-width: 375px;
+        --phone-height: 812px;
+        --phone-border-radius: 40px;
+        --phone-inner-radius: 32px;
+        --safe-area: 8px;
+        --header-h: 48px;
+        --color-primary: #16a34a;
+        --color-bg: #f9fafb;
+        --color-surface: #ffffff;
+        --color-text: #0f172a;
+        --color-muted: #64748b;
+        --shadow-phone: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+        --shadow-inset: inset 0 2px 4px rgba(0, 0, 0, 0.06);
+      }
+
+      * { box-sizing: border-box; }
+
+      body {
+        margin: 0;
+        padding: 0;
+        font-family:
+          system-ui,
+          -apple-system,
+          BlinkMacSystemFont,
+          "Segoe UI",
+          Roboto,
+          "Helvetica Neue",
+          Arial,
+          sans-serif;
+        background: linear-gradient(135deg, #e8f5e9 0%, #c8e6c9 100%);
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        overflow-x: hidden;
+      }
+
+      /* نصصفي لجميع الشاشات باستثناء تلك التي تقل عن 640 بكسل */
+      @media (min-width: 640px) {
+        body { font-size: 1.125rem; }
+      }
+
+      .preview-container {
+        position: relative;
+        width: var(--phone-width);
+        height: var(--phone-height);
+        background: #000;
+        border-radius: var(--phone-border-radius);
+        padding: var(--safe-area);
+        box-shadow: var(--shadow-phone);
+        animation: breathe 6s ease-in-out infinite;
+      }
+
+      @keyframes breathe {
+        0%,
+        100% {
+          transform: translateY(0) scale(1);
+          filter: drop-shadow(0 10px 15px rgba(0, 0, 0, 0.2));
+        }
+        50% {
+          transform: translateY(-6px) scale(1.02);
+          filter: drop-shadow(0 20px 25px rgba(0, 0, 0, 0.25));
+        }
+      }
+
+      .phone-frame {
+        width: 100%;
+        height: 100%;
+        border-radius: var(--phone-inner-radius);
+        overflow: hidden;
+        background: var(--color-surface);
+        position: relative;
+        box-shadow: var(--shadow-inset);
+      }
+
+      .phone-notch {
+        position: absolute;
+        top: var(--safe-area);
+        left: 50%;
+        transform: translateX(-50%);
+        width: 160px;
+        height: 30px;
+        background: #111;
+        border-radius: 18px;
+        z-index: 10;
+        box-shadow: inset 0 1px 3px rgba(255, 255, 255, 0.1);
+      }
+
+      .phone-screen {
+        width: 100%;
+        height: 100%;
+        position: relative;
+        background: var(--color-bg);
+        overflow: hidden;
+      }
+
+      /* طبقة الهيدر الخفيفة لإغلاق HEADER */
+      .phone-screen::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: var(--header-h);
+        background: linear-gradient(to bottom, rgba(255, 255, 255, 0.8), rgba(255, 255, 255, 0));
+        backdrop-filter: blur(6px);
+        z-index: 5;
+        pointer-events: none;
+      }
+
+      iframe {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        border: none;
+        background: #fff;
+        z-index: 2;
+      }
+
+      /* محددات إطار الهاتف */
+      .phone-frame::after {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        border-radius: var(--phone-inner-radius);
+        box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.06);
+        pointer-events: none;
+        z-index: 3;
+      }
+
+      /* زر الهوم المحاكى */
+      .home-btn {
+        position: absolute;
+        bottom: var(--safe-area);
+        left: 50%;
+        transform: translateX(-50%);
+        width: 36px;
+        height: 36px;
+        border-radius: 50%;
+        background: rgba(0, 0, 0, 0.08);
+        border: 1px solid rgba(0, 0, 0, 0.12);
+        z-index: 8;
+        cursor: pointer;
+        transition: background 0.2s;
+      }
+      .home-btn:hover { background: rgba(0, 0, 0, 0.15); }
+
+      /* شارة معاينة */
+      .badge {
+        position: absolute;
+        top: calc(var(--header-h) + var(--safe-area));
+        right: var(--safe-area);
+        background: linear-gradient(135deg, #10b981, #059669);
+        color: #fff;
+        font-size: 0.7rem;
+        font-weight: 700;
+        padding: 4px 8px;
+        border-radius: 999px;
+        z-index: 20;
+        box-shadow: 0 2px 6px rgba(16, 185, 129, 0.35);
+        letter-spacing: 0.02em;
+        pointer-events: none;
+      }
+
+      /* علامة الحجم للشاشات الصغيرة */
+      @media (max-width: 640px) {
+        .preview-container {
+          width: 100%;
+          max-width: var(--phone-width);
+          height: auto;
+          aspect-ratio: 9 / 19.5;
+        }
+      }
+
+      .info {
+        margin-top: 1.5rem;
+        text-align: center;
+        color: var(--color-muted);
+        font-size: 0.9rem;
+        line-height: 1.5;
+      }
+
+      .info strong { color: var(--color-text); }
+
+      /* تأثير الموجة الناعم */
+      @media (prefers-reduced-motion: reduce) {
+        .preview-container { animation: none; }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="preview-container">
+      <div class="phone-frame">
+        <!-- الشعار العلوي المحاكى لنظام iOS/Android -->
+        <div class="phone-notch"></div>
+
+        <div class="phone-screen">
+          <div class="badge">معاينة</div>
+          <iframe
+            title="دليل العراق — تطبيق Capacitor"
+            src="/index.html"
+            allowfullscreen
+          ></iframe>
+
+          <!-- زر الهوم المحاكى للشاشات التي تعمل باللمس -->
+          <button
+            class="home-btn"
+            aria-label="الصفحة الرئيسية"
+            title="الصفحة الرئيسية"
+            type="button"
+            onclick="this.focus()"
+          ></button>
+        </div>
+      </div>
+    </div>
+
+    <div class="info">
+      <strong>معاينة دليل العراق</strong>
+      <p>
+        يعرض هذا الإطار هاتفًا افتراضيًا ويضع <code>index.html</code> الخاص بالتطبيق (الصفحة الأساسية) داخله.
+        عند استخدام `npm run cap:open` أو `cap open android`، سيتم تشغيل التطبيق الحقيقي على جهاز حقيقي أو محاكي.
+      </p>
+    </div>
+
+    <script>
+      /* إمكانية تحريك الإطار بعمق أكبر عند التحريك */
+      let startY = 0;
+      const container = document.querySelector('.preview-container');
+      container.addEventListener('pointerdown', (e) => {
+        startY = e.clientY;
+      });
+      container.addEventListener('pointermove', (e) => {
+        if (!startY) return;
+        const deltaY = (e.clientY - startY) * 0.15;
+        container.style.transform = `translateY(${deltaY}px)`;
+      });
+      container.addEventListener('pointerup', () => {
+        startY = 0;
+        container.style.transform = '';
+      });
+    </script>
+  </body>
+</html>

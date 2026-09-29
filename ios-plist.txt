@@ -1,0 +1,1 @@
+NSLocationWhenInUseUsageDescription=نحتاج للوصول إلى موقعك لعرض المتاجر والخدمات القريبة منك في محافظتك

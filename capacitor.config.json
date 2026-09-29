@@ -1,0 +1,11 @@
+{
+  "appId": "com.forge.appmumllnxo",
+  "appName": "دليل العراق",
+  "webDir": "www",
+  "server": {
+    "androidScheme": "https"
+  },
+  "android": {
+    "adjustMarginsForEdgeToEdge": "force"
+  }
+}
